@@ -1,0 +1,14 @@
+{
+  "home": {
+    "title": "home",
+    "content": "my home"
+  },
+  "about": {
+    "title": "about",
+    "content": "my about"
+  },
+  "List": {
+    "title": "List",
+    "content": "my List"
+  }
+}

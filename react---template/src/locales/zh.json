@@ -1,0 +1,15 @@
+{
+    "home":{
+      "title":"首页",
+      "content":"我是首页"
+    },
+    "about":{
+      "title":"登录",
+      "content":"登录页面"
+    },
+    "List": {
+      "title": "文章列表",
+      "content": "我是列表",
+      "text":"测试"
+    }
+  }
