@@ -1,14 +1,30 @@
 import { axios } from '@/api/request'
 
-export interface LoginParam {
-  username: string
-  password: string
+// 获取文章列表
+export const GetPosts = (param:any) => {
+  return axios({
+    url: `/api/posts/${param.id}`,
+    method: 'GET',
+    // data: param
+  })
 }
 
-export const UserLogin = (param: LoginParam) => {
+// 修改文章
+export const UpdatePosts = (param:any) => {
   return axios({
-    url: '/user/login',
-    method: 'post',
+    url: `/api/posts/${param.id}`,
+    method: 'PUT',
     data: param
   })
+
+}
+
+// 删除文章
+export const DeletePosts = (param:any) => {
+  return axios({
+    url: `/api/posts/${param.id}`,
+    method: 'DELETE',
+    data: param
+  })
+
 }

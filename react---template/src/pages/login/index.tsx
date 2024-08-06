@@ -2,11 +2,11 @@ import React from "react";
 // import { useState } from "react";
 
 import type { FormProps } from "antd";
-import { Button, Checkbox, Form, Input } from "antd";
+import { Button, Checkbox, Form, Input, Space } from "antd";
 import imgLogo from "./logo.png";
 import "./login.scss";
 import { LoginType } from "@/typings/LoginType";
-import { UserLogin } from "./api";
+import { UserLogin, register } from "./api";
 
 import { useNavigate } from "react-router-dom";
 
@@ -30,17 +30,29 @@ function Login() {
   const dispatch = useDispatch();
   // 获取store中的token
   const token = useSelector((state: any) => state.token);
-  console.log(11111111,token);
-  
+
+  // 登录
   const onFinish: FormProps<LoginType>["onFinish"] = async (values) => {
-    let param = {
-      username: values.username,
-      password: values.password,
-    };
-    const { data: res } = await UserLogin(param);
-    // console.log(res.Token);
-    dispatch(setToken(res.Token));
-    navigate(`/?name=${values.username}&Password=${values.password}`);
+    try {
+      let param = {
+        username: values.username,
+        password: values.password,
+      };
+      const res = await UserLogin(param);
+      console.log(res);
+      if (res.message == "该用户未注册") {
+        // 注册          
+        Register(param);
+        return;
+      }
+      dispatch(setToken(res.token));
+      let user=JSON.stringify(res.user);
+      localStorage.setItem("user", user);
+      navigate(`/`);
+    } catch (error) {
+      console.log("登录", error);
+
+    }
     // console.log("Success:", values);
   };
 
@@ -49,6 +61,18 @@ function Login() {
   ) => {
     console.log("Failed:", errorInfo);
   };
+
+  // 注册
+  const Register = async (param: LoginType) => {
+    console.log("注册", param);
+    let param1 = {
+      username: param.username,
+      password: param.password,
+      email: param.username,
+    }
+    await register(param1)
+    await onFinish(param);
+  }
   return (
     <>
       <Form
@@ -83,10 +107,15 @@ function Login() {
               >
                 <Checkbox>记住</Checkbox>
               </Form.Item>
-              <Form.Item wrapperCol={{ offset: 5, span: 10 }}>
-                <Button htmlType="submit" type="primary" block={true}>
-                  登录
-                </Button>
+              <Form.Item wrapperCol={{ offset: 5, span: 10 }} >
+                <Space>
+                  <Button type="primary" htmlType="submit">
+                    注册登录
+                  </Button>
+                  {/* <Button htmlType="button" onClick={register}>
+                    注册
+                  </Button> */}
+                </Space>
               </Form.Item>
             </div>
             {/* <div className="ipt-con">

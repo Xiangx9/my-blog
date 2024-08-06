@@ -38,15 +38,19 @@ request.interceptors.response.use(
       case 504:
         message.error("网络超时");
         break;
-      default:
+      case 400:
         message.info(data.message);
+        break;
+      default:
+        // message.info(data.message);
     }
     return response.data;
   },
   (error) => {
-    const { response } = error;
+    const { response } = error;    
     if (response) {
-      message.error(error.message);
+      // message.error(error.message);
+      message.error(response.data.message);
       return Promise.reject(error);
     } else {
       message.error("网络连接异常,请稍后再试!");

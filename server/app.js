@@ -5,16 +5,15 @@ const authRoutes = require('./routes/anth');
 const postRoutes = require('./routes/posts');
 
 const app = express();
-const PORT = process.env.PORT || 6000;
+const PORT = process.env.PORT || 3030;
 
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect('mongodb://localhost:27017/my_blog', { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log('MongoDB connected'))
-    .catch(err => console.log(err));
-
+mongoose.connect('mongodb://localhost:27017/my_blog', {})
+    .then(() => console.log('MongoDB 启动成功'))
+    .catch(err => console.log("MongoDB 启动成功",err));
+    
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
-
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`http://localhost:${PORT}`));

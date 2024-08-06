@@ -22,7 +22,7 @@ import "./common/iocnfont/iconfont.css"; // 引入图标
 // import { Provider } from "react-redux";
 
 // 正式上线前，一定不要忘记关掉Mock.js！！！直接注释掉import './mock'
-import './mock'
+// import './mock'
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

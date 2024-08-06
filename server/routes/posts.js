@@ -3,10 +3,10 @@ const Post = require('../models/Post');
 const router = express.Router();
 
 router.post('/', async (req, res) => {
-    const { title, content, author } = req.body;
+    const { title, content, author_id,author_name } = req.body;
 
     try {
-        const newPost = new Post({ title, content, author });
+        const newPost = new Post({ title, content, author_id,author_name });
         const savedPost = await newPost.save();
         res.status(201).json(savedPost);
     } catch (err) {
@@ -16,8 +16,18 @@ router.post('/', async (req, res) => {
 
 router.get('/', async (req, res) => {
     try {
-        const posts = await Post.find().populate('author', 'username');
-        res.status(200).json(posts);
+        const posts = await Post.find();
+        res.status(200).json(posts.reverse());
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+router.get('/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const posts = await Post.find({ author_id:id });
+        res.status(200).json(posts.reverse());
     } catch (err) {
         res.status(500).json(err);
     }
@@ -26,7 +36,8 @@ router.get('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
     const { id } = req.params;
     const { title, content } = req.body;
-
+    console.log(id,title, content);
+    
     try {
         const updatedPost = await Post.findByIdAndUpdate(id, { title, content }, { new: true });
         res.status(200).json(updatedPost);
@@ -40,7 +51,7 @@ router.delete('/:id', async (req, res) => {
 
     try {
         await Post.findByIdAndDelete(id);
-        res.status(200).json({ message: 'Post deleted' });
+        res.status(200).json({ message: '删除成功' });
     } catch (err) {
         res.status(500).json(err);
     }

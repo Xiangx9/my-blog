@@ -10,7 +10,10 @@
     }
     .ipt-con {
       margin: 50px;
-      // width: 400px;
+      .btn{
+        display: flex;
+        justify-content: space-evenly;
+      }
     }
   }
 }
