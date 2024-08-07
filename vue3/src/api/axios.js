@@ -40,6 +40,7 @@ function refreshToken() {
 axios.interceptors.response.use(
   (response) => {
     // 对响应数据做一些处理
+    ElMessage.success(response.data.message);
     return response;
   },
   (error) => {

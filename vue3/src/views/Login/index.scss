@@ -1,0 +1,21 @@
+.login-container{
+  // width: 500px;
+  background: rgba(255, 255, 255, .5);
+  padding: 30px;
+  border:1px solid #ccc;
+  border-radius: 25px;
+  transition: all 1s ease-in-out;
+  margin: 20vh;
+  box-shadow: 5px 5px  #000;
+  
+  .demo-ruleForm{
+    button{
+      margin: 0 auto
+    }
+  }
+}
+.login-container:hover{
+  background: rgba(255, 255, 255, .7);
+  scale: 1.1;
+  border:1px solid #09a4b9;
+}

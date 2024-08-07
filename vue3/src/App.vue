@@ -1,6 +1,9 @@
 <script setup>
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import themeStore from '@/store/theme'
+
+
 //i18n
 const I18n = useI18n()
 const { locale } = useI18n()
@@ -10,11 +13,12 @@ const translate = (lang) => {
   localStorage.setItem('lang', lang)
 }
 
-const type = ref('light')
+const type = ref(themeStore().theme || 'light')
 const onChange = (e) => {
+  themeStore().theme = type.value
   document.documentElement.setAttribute('theme-mode', type.value)
 }
-
+onChange()
 </script>
 
 <template>

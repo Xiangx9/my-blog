@@ -9,11 +9,11 @@ const routes = [
     // 页面逻辑
     path: "/", //路由分配的 URL
     name: "home", //当路由指向此页面时显示的名字
-    component: () => import("@/views/home/index.vue"), //路由调用这个页面时加载的组件名
+    component: () => import("@/views/Home/index.vue"), //路由调用这个页面时加载的组件名
   }, {
-    path: "/Parent",
-    name: "Parent",
-    component: () => import("@/views/Parent/index.vue"),
+    path: "/Login",
+    name: "Login",
+    component: () => import("@/views/Login/index.vue"),
   }, {
     path: "/Child",
     name: "Child",

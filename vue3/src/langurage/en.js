@@ -1,9 +1,16 @@
 // en.js 创建英文语言包对象
 export default {
+  login:{
+    title: 'Login',
+    username: 'Username',
+    password: 'Password',
+    login: 'Register Login',
+  },
   table: {
-    Parent: 'Go Parent',
-    TailwindCSS: 'Go TailwindCSS',
-    HelloWorld: 'HelloWorld'
+
+  },
+  No: {
+    subTitle: 'Go home ',
   },
 }
 
