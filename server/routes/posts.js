@@ -1,8 +1,9 @@
 const express = require('express');
 const Post = require('../models/Post');
+const auth = require('../middlewares/auth');
 const router = express.Router();
 
-router.post('/', async (req, res) => {
+router.post('/',auth, async (req, res) => {
     const { title, content, author_id,author_name } = req.body;
 
     try {
@@ -23,7 +24,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', auth,async (req, res) => {
     const { id } = req.params;
     
     try {
@@ -34,7 +35,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id',auth, async (req, res) => {
     const { id } = req.params;
     const { title, content } = req.body;
     console.log(id,title, content);
@@ -47,7 +48,7 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id',auth, async (req, res) => {
     const { id } = req.params;
 
     try {

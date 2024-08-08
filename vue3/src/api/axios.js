@@ -2,6 +2,11 @@ import axios from "axios";
 import { showMessage } from "./status"; // 引入状态码文件
 import { ElMessage } from "element-plus"; // 引入el 提示框，这个项目里用什么组件库这里引什么
 import tokenStore from "@/store/token.js";
+let store= JSON.parse(tokenStore().user)
+let token = store.token;
+let refreshTokens = store.refreshToken;
+console.log(store);
+
 
 // 设置接口超时时间
 axios.defaults.timeout = 60000;
@@ -17,7 +22,7 @@ axios.interceptors.request.use(
     config.headers = {
       //'Content-Type':'application/x-www-form-urlencoded',   // 传参方式表单
       "Content-Type": "application/json;charset=UTF-8", // 传参方式json
-      Authorization: `Bearer ${tokenStore().token}`, // 这里自定义配置，这里传的是token
+      Authorization: `Bearer ${token}`, // 这里自定义配置，这里传的是token
     };
     return config;
   },
@@ -31,9 +36,9 @@ axios.interceptors.request.use(
 let isRefreshing = false;
 let refreshSubscribers = [];
 //刷新token
-function refreshToken() {
+function refreshToken(params) {
   // instance是当前request.js中已创建的axios实例
-  return axios.post("/refreshtoken").then((res) => res.data);
+  return axios.post("/api/auth/refresh-token",params).then((res) => res.data);
 }
 
 //http response 拦截器
@@ -51,10 +56,17 @@ axios.interceptors.response.use(
         if (!isRefreshing) {
           isRefreshing = true;
           // 发起刷新 token 的请求
-          return refreshToken()
+          let params = {
+            refreshToken: refreshTokens,
+          }
+          
+          return refreshToken(params)
             .then((res) => {
-              const newToken = res.data.token;
-              tokenStore().token = newToken;
+              let user = JSON.stringify(res)
+              console.log(user);
+              
+              const newToken = res.token;
+              tokenStore().user = user
               // 刷新 token 完成后，重新发送之前失败的请求
               refreshSubscribers.forEach((subscriber) => subscriber(newToken));
               refreshSubscribers = [];
