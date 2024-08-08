@@ -6,8 +6,19 @@ export default {
     password: '密码',
     login: '注册登录',
   },
+  btn:{
+    home: '首页',
+    addPosts: '添加文章',
+    myPosts: '我的文章',
+    updated:'更新',
+    delete:'删除',
+    cancel:'取消',
+    confirm:'确定',
+  },
   table: {
-
+    tip:'更新文章',
+    title: '标题',
+    content: '内容',
   },
   No: {
     subTitle: '去首页'

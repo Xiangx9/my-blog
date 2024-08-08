@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import themeStore from '@/store/theme'
-
+import { ElButton } from 'element-plus'
 
 //i18n
 const I18n = useI18n()
@@ -23,7 +23,17 @@ onChange()
 
 <template>
   <div class="nav">
-    <div></div>
+    <div>
+      <router-link to="/">
+        <el-Button type="info">{{ $t('btn.home') }}</el-Button>
+      </router-link>
+      <router-link to="/AddPosts">
+        <el-Button type="success" style="margin: 0 20px;">{{ $t('btn.addPosts') }}</el-Button>
+      </router-link>
+      <router-link to="/MyPosts">
+        <el-Button type="primary">{{ $t('btn.myPosts') }}</el-Button>
+      </router-link>
+    </div>
     <div style="display: flex;align-items: center;">
       <el-select style="width: 80px;" v-model="locale" @change="translate">
         <el-option label="zh-cn" value="zh-cn" />

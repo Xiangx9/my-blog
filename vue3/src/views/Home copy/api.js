@@ -1,1 +1,1 @@
-import { request } from '@arc/api/axios'
+import { request } from '@/api/axios'

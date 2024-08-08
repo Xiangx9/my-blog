@@ -15,13 +15,13 @@ const routes = [
     name: "Login",
     component: () => import("@/views/Login/index.vue"),
   }, {
-    path: "/Child",
-    name: "Child",
-    component: () => import("@/views/Child/index.vue"),
+    path: "/AddPosts",
+    name: "AddPosts",
+    component: () => import("@/views/AddPosts/index.vue"),
   }, {
-    path: "/TailwindCSS",
-    name: "TailwindCSS",
-    component: () => import("@/views/TailwindCSS/index.vue"),
+    path: "/MyPosts",
+    name: "MyPosts",
+    component: () => import("@/views/MyPosts/index.vue"),
   },{
     path: '/:error*',
     name: "404",

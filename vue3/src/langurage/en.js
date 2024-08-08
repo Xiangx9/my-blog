@@ -6,8 +6,19 @@ export default {
     password: 'Password',
     login: 'Register Login',
   },
+  btn:{
+    home: 'home',
+    addPosts: 'addPosts',
+    myPosts: 'myPosts',
+    updated:'updated',
+    delete:'delete',
+    cancel:'cancel',
+    confirm:'confirm',
+  },
   table: {
-
+    tip:'updated posts',
+    title: 'title',
+    content: 'content',
   },
   No: {
     subTitle: 'Go home ',

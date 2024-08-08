@@ -9,8 +9,10 @@
   animation-direction: normal;
   animation-fill-mode: none;
 
-  /* shorthand
-		animation: fade-in-top 1s linear 0s 1 normal none;*/
+.bottom{
+  float: right;
+  margin: 20px 0;
+}
 }
 
 @keyframes fade-in-top {
