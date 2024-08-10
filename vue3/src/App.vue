@@ -34,7 +34,7 @@ onChange()
         <el-Button type="primary">{{ $t('btn.myPosts') }}</el-Button>
       </router-link>
     </div>
-    <div style="display: flex;align-items: center;">
+    <div class="selects">
       <el-select style="width: 80px;" v-model="locale" @change="translate">
         <el-option label="zh-cn" value="zh-cn" />
         <el-option label="en-us" value="en-us" />
@@ -44,16 +44,17 @@ onChange()
         <el-option label="dark" value="dark" />
         <el-option label="red" value="red" />
       </el-select>
-
     </div>
   </div>
-  <keep-alive>
-    <router-view v-slot="{ Component, route }">
-      <transition :name="route.meta.transition">
-        <component :is="Component" />
-      </transition>
-    </router-view>
-  </keep-alive>
+
+
+  <!-- <keep-alive> -->
+  <router-view v-slot="{ Component, route }">
+    <transition :name="route.meta.transition">
+      <component :is="Component" />
+    </transition>
+  </router-view>
+  <!-- </keep-alive> -->
 </template>
 
 <style scoped lang="scss">
@@ -62,10 +63,28 @@ onChange()
   height: 50px;
   background-color: var(--bg-color);
   position: sticky;
+  top: 10px;
   margin-bottom: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 20px;
+}
+
+.selects {
+  display: flex;
+  align-items: center;
+}
+
+@media screen and (max-width: 768px) {
+  .nav {
+    display: block;
+    margin: 10px 0;
+  }
+
+  .nav .selects {
+    display: none;
+  }
+
 }
 </style>

@@ -8,7 +8,7 @@
       </div>
     </template>
     <h2 style="margin: 0 auto;text-align: center;">{{ item.title }}</h2>
-    <p class="mx-1">{{ item.content }}</p>
+    <p style="max-height: 200px; overflow: auto;">{{ item.content }}</p>
     <div class="bottom">
       <el-button type="primary" :icon="Edit" plain @click="EditPostVisible(item)" style="margin: 0 10px;">
         {{ $t('btn.updated') }}
@@ -46,7 +46,8 @@ import { ref, } from 'vue'
 import { Delete, Edit } from '@element-plus/icons-vue'
 import { GetPosts, DeletePosts, EditPosts } from './api'
 import tokenStore from '@/store/token'
-let { user } = JSON.parse(tokenStore().user)
+let user = tokenStore().user
+console.log(user);
 
 // 获取文章
 const loading = ref(true)

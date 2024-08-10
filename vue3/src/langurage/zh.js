@@ -14,6 +14,7 @@ export default {
     delete:'删除',
     cancel:'取消',
     confirm:'确定',
+    comments:'评论',
   },
   table: {
     tip:'更新文章',

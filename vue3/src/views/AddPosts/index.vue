@@ -21,7 +21,7 @@ import { addPosts } from './api'
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import tokenStore from '@/store/token'
-let { user } = JSON.parse(tokenStore().user)
+let user = tokenStore().user
 const router = useRouter()
 
 const formRef = ref()

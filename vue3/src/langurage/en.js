@@ -14,6 +14,7 @@ export default {
     delete:'delete',
     cancel:'cancel',
     confirm:'confirm',
+    comments:'comments',
   },
   table: {
     tip:'updated posts',

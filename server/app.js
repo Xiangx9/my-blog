@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const authRoutes = require('./routes/anth');
 const postRoutes = require('./routes/posts');
+const commentRoutes = require('./routes/comments');
+
 
 const app = express();
 const PORT = process.env.PORT || 3030;
@@ -16,4 +18,6 @@ mongoose.connect('mongodb://localhost:27017/my_blog', {})
     
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
+app.use('/api/comments', commentRoutes);
+
 app.listen(PORT, () => console.log(`http://localhost:${PORT}`));

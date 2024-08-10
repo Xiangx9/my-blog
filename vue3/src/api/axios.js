@@ -1,96 +1,97 @@
 import axios from "axios";
+import { useRouter } from 'vue-router'
 import { showMessage } from "./status"; // 引入状态码文件
 import { ElMessage } from "element-plus"; // 引入el 提示框，这个项目里用什么组件库这里引什么
-import tokenStore from "@/store/token.js";
-let store= JSON.parse(tokenStore().user)
-let token = store.token;
-let refreshTokens = store.refreshToken;
-console.log(store);
-
-
-// 设置接口超时时间
-axios.defaults.timeout = 60000;
+import tokenStore from "@/store/token";
+const router = useRouter()
 
 // 请求地址，这里是动态赋值的的环境变量，下一篇会细讲，这里跳过
 // @ts-ignore
 axios.defaults.baseURL = "";
+axios.defaults.headers = {
+  //'Content-Type':'application/x-www-form-urlencoded',   // 传参方式表单
+  "Content-Type": "application/json;charset=UTF-8", // 传参方式json
+  Authorization: `Bearer ${tokenStore().token}`, // 这里自定义配置，这里传的是token
+};
+// 设置接口超时时间
+axios.defaults.timeout = 90000;
 
 //http request 拦截器
 axios.interceptors.request.use(
   (config) => {
     // 配置请求头
-    config.headers = {
-      //'Content-Type':'application/x-www-form-urlencoded',   // 传参方式表单
-      "Content-Type": "application/json;charset=UTF-8", // 传参方式json
-      Authorization: `Bearer ${token}`, // 这里自定义配置，这里传的是token
-    };
+    if (config.url == "/api/goods/upload") {
+      axios.defaults.headers['Content-Type'] = "multipart/form-data"; //图片上传
+    }
+    // console.log("config", config.headers);
     return config;
   },
   (error) => {
-    console.log("error");
+    console.log("error", error);
     return Promise.reject(error);
   }
 );
 
-// 定义一个变量，用于标记 token 刷新的状态
-let isRefreshing = false;
-let refreshSubscribers = [];
 //刷新token
+// 是否正在刷新的标记
+let isRefreshing = false
+//重试队列
+let requests = []
 function refreshToken(params) {
-  // instance是当前request.js中已创建的axios实例
-  return axios.post("/api/auth/refresh-token",params).then((res) => res.data);
+  return axios.post("/api/auth/refresh-token", params).then((res) => res.data);
 }
 
 //http response 拦截器
 axios.interceptors.response.use(
   (response) => {
     // 对响应数据做一些处理
-    ElMessage.success(response.data.message);
+    // ElMessage.success(response.data.message);
     return response;
   },
-  (error) => {
+  async (error) => {
     const { response } = error;
     const originalRequest = error.config;
     if (response) {
-      if (response.status === 401) {
+      if (response.status === 401) { // 401 token失效
         if (!isRefreshing) {
-          isRefreshing = true;
+          isRefreshing = true
           // 发起刷新 token 的请求
           let params = {
-            refreshToken: refreshTokens,
+            refreshToken: tokenStore().refreshToken ,
           }
+          console.log("123refreshToken",tokenStore().refreshToken );
           
-          return refreshToken(params)
-            .then((res) => {
-              let user = JSON.stringify(res)
-              console.log(user);
-              
-              const newToken = res.token;
-              tokenStore().user = user
-              // 刷新 token 完成后，重新发送之前失败的请求
-              refreshSubscribers.forEach((subscriber) => subscriber(newToken));
-              refreshSubscribers = [];
-              
-              return axios(originalRequest);
+          return refreshToken(params).then((res) => {
+            console.log("res", res);
+            
+            tokenStore().user = res.user
+            tokenStore().token = res.token
+            tokenStore().refreshToken = res.refreshToken
+            const newToken = tokenStore().token; // 将新的token保存到本地
+
+            originalRequest.headers.Authorization = `Bearer ${newToken}`; // 将新的token设置到请求头中
+            // token 刷新后将数组的方法重新执行
+            requests.forEach((cb) => {
+              cb(newToken)
             })
-            .catch((res) => {
-              console.error("refreshtoken error =>", res);
-              //去登录页
-            })
-            .finally(() => {
-              isRefreshing = false;
-            });
+            requests = [] // 重新请求完清空
+            return axios.request(originalRequest);
+          }).catch((err) => {
+            // 回到登录页
+            router.push({ path: "/Login" });
+          }).finally(() => {
+            isRefreshing = false
+          })
         } else {
-          // 正在刷新 token，将当前请求加入队列，等待刷新完成后再重新发送
-          return new Promise((resolve) => {
-            refreshSubscribers.push((newToken) => {
-              originalRequest.headers.Authorization = `Bearer ${newToken}`;
-              resolve(axios(originalRequest));
-            });
-          });
+          // 正在刷新token，将请求存入队列
+          return new Promise((resolve, reject) => {
+            requests.push((token) => {
+              originalRequest.headers.Authorization = `Bearer ${token}`;
+              resolve(axios(originalRequest))
+            })
+          })
         }
       }
-
       showMessage(response.status); // 传入响应码，匹配响应码对应信息
       ElMessage.warning(response.data.message);
       return Promise.reject(response.data);
@@ -133,8 +134,10 @@ export function request(url = "", params = {}, type = "POST") {
     promise
       .then((res) => {
         resolve(res);
+        console.log("处理返回res", res);
       })
       .catch((err) => {
+        console.log("处理返回err", err);
         reject(err);
       });
   });

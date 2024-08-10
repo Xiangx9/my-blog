@@ -8,7 +8,7 @@
       </div>
     </template>
     <h2 style="margin: 0 auto;text-align: center;">{{ item.title }}</h2>
-    <p>{{ item.content }}</p>
+    <p @click="goPostsDetail(item)" style="cursor: pointer;">{{ item.content }}</p>
   </el-card>
 </template>
 
@@ -16,7 +16,8 @@
 import './index.scss'
 import { ref, reactive } from 'vue'
 import { GetPosts } from './api'
-
+import { useRouter } from 'vue-router'
+const router = useRouter()
 
 const loading = ref(true)
 let PostLists = reactive([])
@@ -33,6 +34,15 @@ const getPosts = async () => {
   }
 }
 getPosts()
+
+
+// 去帖子详情页
+const goPostsDetail = (item) => {
+  router.push({
+    path: '/PostsDetails',
+    query: item
+  })
+}
 </script>
 
 <style scope lang="scss"></style>

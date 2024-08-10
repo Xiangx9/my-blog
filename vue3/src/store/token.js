@@ -3,14 +3,13 @@ const tokenStore = defineStore("user", {
   state: () => {
     return {
         token: '',
+        refreshToken:'',
         user:{}
     };
   },
   getters: {
     setToken: (state) => {
-      // console.log(state.user); // 获取state中的user
-      let token = JSON.parse(state.user).token;
-     return state.token = token;
+      // console.log(state); // 获取state中的user
     }
   },
   actions: {
@@ -20,7 +19,7 @@ const tokenStore = defineStore("user", {
     enabled: true, // 开启持久化
     key: 'user',
     storage: window.localStorage,
-    paths: ['user'],
+    paths: ["token","refreshToken","user"],
   },
 });
 

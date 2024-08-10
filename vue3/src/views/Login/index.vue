@@ -70,12 +70,13 @@ const submitForm = async (formEl) => {
 
 const loginss = (pram) => {
   login(pram).then(res => {
-    let user = JSON.stringify(res.data)
+    let user = res.data
     if (res.data.message == "该用户未注册") {
       registers(pram)
     } else {
-      store.user = user
-      store.setToken
+      store.user = user.user
+      store.token = user.token
+      store.refreshToken = user.refreshToken
       router.replace('/')
     }
   })

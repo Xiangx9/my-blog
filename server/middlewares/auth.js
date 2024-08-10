@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken');
 
 const auth = (req, res, next) => {
     const token = req.header('Authorization').split(' ')[1];
-    console.log(token);
     
     if (!token) return res.status(400).json({ message: '请登录' });
 

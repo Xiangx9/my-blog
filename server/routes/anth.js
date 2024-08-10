@@ -25,14 +25,13 @@ router.post('/login', async (req, res) => {
     const { username, password } = req.body;
     try {
         const user = await User.findOne({ username });
-        console.log(113, user);
 
         if (!user) return res.status(200).json({ message: '该用户未注册' });
 
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).json({ message: '密码错误' });
 
-        const token = jwt.sign({ id: user._id }, 'secret', { expiresIn: "15m" });
+        const token = jwt.sign({ id: user._id }, 'secret', { expiresIn: "10s" });
         const refreshToken = jwt.sign({ id: user._id }, 'refreshSecret', { expiresIn: '7d' });
 
         user.refreshToken = refreshToken; // 将refreshToken保存到数据库中
@@ -57,13 +56,13 @@ router.post('/refresh-token', async (req, res) => {
             return res.status(403).json({ message: 'Invalid refresh token' });
         }
 
-        const token = jwt.sign({ id: user._id }, 'secret', { expiresIn: '15m' });
+        const token = jwt.sign({ id: user._id }, 'secret', { expiresIn: '10s' });
         const newRefreshToken = jwt.sign({ id: user._id }, 'refreshSecret', { expiresIn: '7d' });
 
         user.refreshToken = newRefreshToken;
         await user.save();
 
-        res.status(200).json({ token, refreshToken: newRefreshToken, user: { username: user.username, _id: user._id },message: '刷新成功' });
+        res.status(200).json({ token, refreshToken: newRefreshToken, user: { username: user.username, _id: user._id }});
     } catch (err) {
         res.status(500).json(err);
     }

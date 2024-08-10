@@ -22,7 +22,13 @@ const routes = [
     path: "/MyPosts",
     name: "MyPosts",
     component: () => import("@/views/MyPosts/index.vue"),
-  },{
+  },
+  {
+    path: "/PostsDetails",
+    name: "PostsDetails",
+    component: () => import("@/views/PostsDetails/index.vue"),
+  },
+  {
     path: '/:error*',
     name: "404",
     component: () => import("@/views/404.vue"),
