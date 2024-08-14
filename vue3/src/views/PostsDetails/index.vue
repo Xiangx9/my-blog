@@ -5,13 +5,18 @@
       <h3>{{ PostsDetails.author_name }}</h3>
       <p>{{ PostsDetails.content }}</p>
     </div>
+    <el-tag type="primary" v-for="item in PostsDetails.categories" style="margin: 0 10px;">{{ item.name }}</el-tag>
+    <el-tag type="primary" v-for="item in PostsDetails.tags" style="margin: 0 10px;">{{ item.name }}</el-tag>
     <div style="height: 50px;"></div>
     <h2>评论区</h2>
-    <div class="comments" v-for="item in CommentLists">
-      <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
-      <span>{{ item.author.username }}</span>
-      <p>{{ item.content }}</p>
+    <div style="margin-bottom: 200px;">
+      <div class="comments" v-for="item in CommentLists">
+        <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
+        <span>{{ item.author.username }}</span>
+        <p>{{ item.content }}</p>
+      </div>
     </div>
+
     <footer class="footer">
       <el-input v-model="content" type="textarea" autocomplete="off" />
       <el-button type="primary" @click="Add()">{{ $t('btn.comments') }}</el-button>

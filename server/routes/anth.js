@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const router = express.Router();
 
+// 注册
 router.post('/register', async (req, res) => {
     const { username, email, password } = req.body;
     try {
@@ -21,6 +22,7 @@ router.post('/register', async (req, res) => {
     }
 });
 
+// 登录
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
     try {
@@ -31,7 +33,7 @@ router.post('/login', async (req, res) => {
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).json({ message: '密码错误' });
 
-        const token = jwt.sign({ id: user._id }, 'secret', { expiresIn: "10s" });
+        const token = jwt.sign({ id: user._id }, 'secret', { expiresIn: "1d" });
         const refreshToken = jwt.sign({ id: user._id }, 'refreshSecret', { expiresIn: '7d' });
 
         user.refreshToken = refreshToken; // 将refreshToken保存到数据库中
@@ -43,7 +45,7 @@ router.post('/login', async (req, res) => {
     }
 });
 
-
+//  刷新token
 router.post('/refresh-token', async (req, res) => {
     const { refreshToken } = req.body;
 
@@ -56,7 +58,7 @@ router.post('/refresh-token', async (req, res) => {
             return res.status(403).json({ message: 'Invalid refresh token' });
         }
 
-        const token = jwt.sign({ id: user._id }, 'secret', { expiresIn: '10s' });
+        const token = jwt.sign({ id: user._id }, 'secret', { expiresIn: '1d' });
         const newRefreshToken = jwt.sign({ id: user._id }, 'refreshSecret', { expiresIn: '7d' });
 
         user.refreshToken = newRefreshToken;

@@ -1,21 +1,22 @@
+// 用户模型
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
-    username: {
+    username: { // 用户名
         type: String,
         required: true,
         unique: true,
     },
-    email: {
+    email: { // 邮箱
         type: String,
         required: false,
         unique: true,
     },
-    password: {
+    password: { // 密码
         type: String,
         required: true,
     },
-    refreshToken: {
+    refreshToken: { // 刷新令牌
         type: String,
     },
 }, { timestamps: true });

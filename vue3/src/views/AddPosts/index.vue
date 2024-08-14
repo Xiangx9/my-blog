@@ -8,6 +8,17 @@
       <el-form-item :label="$t('table.content')" prop="content">
         <el-input v-model="AddForm.content" type="textarea" autocomplete="off" />
       </el-form-item>
+      <el-form-item :label="$t('table.CategoryName')" prop="categories">
+        <el-select v-model="AddForm.categories" placeholder="选择分类" size="large" clearable
+          style="width: 200px;margin:0 10px">
+          <el-option v-for="item in CategoryLists" :key="item._id" :label="item.name" :value="item._id" />
+        </el-select>
+      </el-form-item>
+      <el-form-item :label="$t('table.tagName')" prop="tags">
+        <el-select v-model="AddForm.tags" placeholder="选择标签" size="large" clearable style="width: 200px;margin:0 10px;">
+          <el-option v-for="item in TagLists" :key="item._id" :label="item.name" :value="item._id" />
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button style="margin: 0 auto;" type="primary" @click="Add(formRef)">{{ $t('btn.addPosts') }}</el-button>
       </el-form-item>
@@ -17,7 +28,7 @@
 
 <script setup>
 import './index.scss'
-import { addPosts } from './api'
+import { addPosts, GetTag, GetCategory } from './api'
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import tokenStore from '@/store/token'
@@ -28,6 +39,8 @@ const formRef = ref()
 const AddForm = reactive({
   title: '',
   content: '',
+  categories: '',
+  tags: '',
 })
 
 const AddRules = reactive({
@@ -43,12 +56,11 @@ const Add = (formEl) => {
   if (!formEl) return
   formEl.validate(async (valid) => {
     if (valid) {
-      let params = {
-        title: AddForm.title,
-        content: AddForm.content,
+      let users = {
         author_id: user._id,
         author_name: user.username,
       }
+      let params = { ...AddForm, ...users }
       const { data: res } = await addPosts(params)
       console.log(res.data);
 
@@ -60,7 +72,29 @@ const Add = (formEl) => {
 
 }
 
+// 获取分类
+const CategoryLists = ref([])
+const getCategory = async () => {
+  try {
+    const { data: res } = await GetCategory()
+    CategoryLists.value = res
+  } catch (error) {
+    console.log('获取分类失败', error);
+  }
+}
+getCategory()
 
+// 获取标签
+const TagLists = ref([])
+const getTag = async () => {
+  try {
+    const { data: res } = await GetTag()
+    TagLists.value = res
+  } catch (error) {
+    console.log('获取标签失败', error);
+  }
+}
+getTag()
 
 
 </script>

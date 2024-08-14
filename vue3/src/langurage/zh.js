@@ -15,11 +15,15 @@ export default {
     cancel:'取消',
     confirm:'确定',
     comments:'评论',
+    Category:'添加分类',
+    tags:'添加标签',
   },
   table: {
     tip:'更新文章',
     title: '标题',
     content: '内容',
+    CategoryName:'分类名称',
+    tagName:'标签名称',
   },
   No: {
     subTitle: '去首页'

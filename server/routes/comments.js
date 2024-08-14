@@ -3,7 +3,8 @@ const Comment = require('../models/Comment');
 const auth = require('../middlewares/auth');
 const router = express.Router();
 
-router.post('/', auth, async (req, res) => { // 添加评论
+// 添加评论
+router.post('/', auth, async (req, res) => { 
     const { content, postId } = req.body;
     const author = req.user.id;
 
@@ -16,7 +17,8 @@ router.post('/', auth, async (req, res) => { // 添加评论
     }
 });
 
-router.get('/:postId',auth, async (req, res) => { // 获取评论
+// 获取评论
+router.get('/:postId',auth, async (req, res) => { 
     const { postId } = req.params;
     
     try {
