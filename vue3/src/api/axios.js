@@ -1,9 +1,9 @@
 import axios from "axios";
-import { useRouter } from 'vue-router'
+import router from '@/router/index'
 import { showMessage } from "./status"; // 引入状态码文件
 import { ElMessage } from "element-plus"; // 引入el 提示框，这个项目里用什么组件库这里引什么
 import tokenStore from "@/store/token";
-const router = useRouter()
+
 
 // 请求地址，这里是动态赋值的的环境变量，下一篇会细讲，这里跳过
 // @ts-ignore
@@ -78,7 +78,7 @@ axios.interceptors.response.use(
             return axios.request(originalRequest);
           }).catch((err) => {
             // 回到登录页
-            router.push({ path: "/Login" });
+            router.replace('/login')
           }).finally(() => {
             isRefreshing = false
           })
@@ -93,10 +93,13 @@ axios.interceptors.response.use(
         }
       }
       showMessage(response.status); // 传入响应码，匹配响应码对应信息
+      if (response.data.message=='请登录') {
+        router.replace('/login')
+      }
       ElMessage.warning(response.data.message);
       return Promise.reject(response.data);
     } else {
-      ElMessage.warning("网络连接异常,请稍后再试!");
+      // ElMessage.warning("网络连接异常,请稍后再试!");
     }
   }
 );
