@@ -17,8 +17,11 @@ ul li {
   list-style: none;
 }
 p {
-  white-space: break-spaces
+  margin: 30px;
+  text-align: left;
+  white-space: pre-line;
 }
+
 
 /* 水平垂直居中 */
 .content {
